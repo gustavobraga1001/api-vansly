@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password_hash String
+  created_at    DateTime   @default(now())
+  driver        Driver[]
+  contracts     Contract[]
+
+  @@map("users")
+}
+
+model Driver {
+  id  String @id @default(uuid())
+  cnh String @unique
+  cpf String @unique
+
+  user     User       @relation(fields: [user_id], references: [id])
+  user_id  String
+  Contract Contract[]
+
+  @@map("drivers")
+}
+
+model Contract {
+  id            String   @id @default(uuid())
+  shift         String
+  boarding      String
+  landing       String
+  monthlyAmount Decimal
+  status        Boolean
+  created_at    DateTime @default(now())
+
+  user      User   @relation(fields: [user_id], references: [id])
+  driver    Driver @relation(fields: [driver_id], references: [id])
+  user_id   String
+  driver_id String
+
+  @@map("contracts")
+}
