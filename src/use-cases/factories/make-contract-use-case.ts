@@ -1,5 +1,5 @@
 import { PrismaContractsRepository } from '@/repositories/prisma/prisma-contratcs-repository'
-import { ContractUseCase } from '../contract'
+import { ContractUseCase } from '../create-contract'
 
 export function makeContractUseCase() {
   const contractsRepository = new PrismaContractsRepository()
