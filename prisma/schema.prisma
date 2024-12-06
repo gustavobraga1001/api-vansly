@@ -13,7 +13,7 @@ model User {
   email         String     @unique
   password_hash String
   created_at    DateTime   @default(now())
-  driver        Driver[]
+  driver        Driver?
   contracts     Contract[]
 
   @@map("users")
@@ -24,9 +24,11 @@ model Driver {
   cnh String @unique
   cpf String @unique
 
-  user     User       @relation(fields: [user_id], references: [id])
-  user_id  String
-  Contract Contract[]
+  user         User          @relation(fields: [user_id], references: [id])
+  user_id      String        @unique
+  contracts    Contract[]
+  announcement Announcement?
+  vehicle      Vehicle[]
 
   @@map("drivers")
 }
@@ -47,4 +49,32 @@ model Contract {
   driver_id String
 
   @@map("contracts")
+}
+
+model Announcement {
+  id    String  @id @default(uuid())
+  title String
+  stars Decimal
+  city  String
+
+  driver     Driver  @relation(fields: [driver_id], references: [id])
+  vehicle    Vehicle @relation(fields: [vehicle_id], references: [id])
+  driver_id  String  @unique
+  vehicle_id String  @unique
+
+  @@map("announcements")
+}
+
+model Vehicle {
+  id    String @id @default(uuid())
+  model String
+  plate String
+  mark  String
+  year  String
+
+  driver       Driver        @relation(fields: [driver_id], references: [id])
+  Announcement Announcement?
+  driver_id    String
+
+  @@map("vehicles")
 }
