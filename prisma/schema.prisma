@@ -36,6 +36,7 @@ model Contract {
   shift         String
   boarding      String
   landing       String
+  institution   String?
   monthlyAmount Decimal
   status        Boolean
   created_at    DateTime @default(now())

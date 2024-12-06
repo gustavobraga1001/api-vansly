@@ -5,6 +5,7 @@ interface ContractUseCaseRequest {
   shift: string
   boarding: string
   landing: string
+  institution: string
   monthlyAmount: number
   status: boolean
   userId: string
@@ -22,6 +23,7 @@ export class ContractUseCase {
     shift,
     boarding,
     landing,
+    institution,
     monthlyAmount,
     status,
     userId,
@@ -31,6 +33,7 @@ export class ContractUseCase {
       shift,
       boarding,
       landing,
+      institution,
       monthlyAmount,
       status,
       user_id: userId,
