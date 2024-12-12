@@ -6,9 +6,16 @@ import { StopsRepository } from '@/repositories/stops-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { VehiclesRepository } from '@/repositories/vehicles-repository'
 
+enum Period {
+  MANHA = 'MANHA',
+  TARDE = 'TARDE',
+  NOITE = 'NOITE',
+}
+
 interface CreateRouteUseCaseRequest {
   driverId: string
   date: Date
+  period: Period
 }
 
 export class CreateRouteUseCase {
@@ -22,7 +29,7 @@ export class CreateRouteUseCase {
     private routesStopsRepository: RoutesStopsRepository,
   ) {}
 
-  async execute({ driverId, date }: CreateRouteUseCaseRequest) {
+  async execute({ driverId, date, period }: CreateRouteUseCaseRequest) {
     // Encontrar o veículo do motorista
     const vehicle = await this.vehiclesRepository.findByDriverId(driverId)
 

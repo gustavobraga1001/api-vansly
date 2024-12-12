@@ -43,7 +43,7 @@ model Driver {
 
 model Contract {
   id            String   @id @default(uuid())
-  shift         Period
+  period        Period
   boarding      String
   landing       String
   institution   String?
