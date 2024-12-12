@@ -3,6 +3,16 @@ import { Prisma } from '@prisma/client'
 import { ContractsRepository } from '../contratcs-repository'
 
 export class PrismaContractsRepository implements ContractsRepository {
+  async findActiveContractsByDriverId(driverId: string) {
+    const contractsEnables = await prisma.contract.findMany({
+      where: {
+        driver_id: driverId,
+      },
+    })
+
+    return contractsEnables
+  }
+
   async create(data: Prisma.ContractUncheckedCreateInput) {
     const contract = await prisma.contract.create({
       data,
