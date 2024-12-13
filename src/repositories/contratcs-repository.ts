@@ -1,6 +1,10 @@
-import { Contract, Prisma } from '@prisma/client'
+import { Contract, Period, Prisma } from '@prisma/client'
 
 export interface ContractsRepository {
-  findActiveContractsByDriverId(userId: string): Promise<Contract[]>
+  findActiveContractsByDriverId(driverId: string): Promise<Contract[]>
+  findActiveContractsByDriverIdAndPeriod(
+    driverId: string,
+    period: Period,
+  ): Promise<Contract[]>
   create(data: Prisma.ContractUncheckedCreateInput): Promise<Contract>
 }

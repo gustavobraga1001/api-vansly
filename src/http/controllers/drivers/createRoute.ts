@@ -14,18 +14,32 @@ export async function createRoute(
         message: 'Invalid date format', // Se a data não for válida, o erro é retornado
       })
       .transform((val) => new Date(val)), // Converte para objeto Date
+    period: z.custom(
+      (val) => {
+        const validPeriods = ['MANHA', 'TARDE', 'NOITE']
+        return validPeriods.includes(val)
+      },
+      { message: 'Invalid period' },
+    ),
   })
 
-  const { driverId, date } = registerDriverBodySchema.parse(request.body)
+  const { driverId, date, period } = registerDriverBodySchema.parse(
+    request.body,
+  )
 
   try {
     const createRouteUseCase = makeCreateRouteUseCase()
     await createRouteUseCase.execute({
       driverId,
       date,
+      period,
     })
   } catch (err) {
-    return reply.status(500).send()
+    if (err instanceof Error) {
+      return reply.status(500).send({ message: err.message })
+    } else {
+      return reply.status(500).send({ message: 'An unknown error occurred' })
+    }
   }
 
   return reply.status(201).send()
