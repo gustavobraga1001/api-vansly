@@ -1,8 +1,12 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
+import { Prisma, Stop } from '@prisma/client'
 import { StopsRepository } from '../stops-repository'
 
 export class PrismaStopsRepository implements StopsRepository {
+  async updateStop(stop: Stop) {
+    return prisma.stop.update({ where: { id: stop.id }, data: stop })
+  }
+
   async findByStopId(stopId: string) {
     const stops = await prisma.stop.findFirst({
       where: {
