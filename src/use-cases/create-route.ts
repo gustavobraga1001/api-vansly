@@ -6,7 +6,7 @@ import { StopsRepository } from '@/repositories/stops-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { VehiclesRepository } from '@/repositories/vehicles-repository'
 
-enum Period {
+export enum Period {
   MANHA = 'MANHA',
   TARDE = 'TARDE',
   NOITE = 'NOITE',

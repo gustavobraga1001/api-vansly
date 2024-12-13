@@ -5,6 +5,7 @@ import { verifyJWT } from '@/http/middlewares/verify-jwt'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { createAbsence } from './absence'
+import { getRoute } from './get-route'
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', register)
@@ -13,4 +14,5 @@ export async function usersRoutes(app: FastifyInstance) {
 
   app.get('/me', { onRequest: [verifyJWT] }, profile)
   app.post('/absence', { onRequest: [verifyJWT] }, createAbsence)
+  app.post('/get-route', { onRequest: [verifyJWT] }, getRoute)
 }
