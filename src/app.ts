@@ -1,15 +1,25 @@
 import fastify from 'fastify'
-import { contractRoutes } from './http/controllers/contracts/routes'
+import fastifyJwt from '@fastify/jwt'
+import fastifyCookie from '@fastify/cookie'
+import cors from '@fastify/cors'
 import { ZodError } from 'zod'
 import { env } from './env'
-import fastifyJwt from '@fastify/jwt'
 import { usersRoutes } from './http/controllers/users/routes'
-import fastifyCookie from '@fastify/cookie'
+import { contractRoutes } from './http/controllers/contracts/routes'
 import { driversRoutes } from './http/controllers/drivers/routes'
 import { announcementRoutes } from './http/controllers/announcements/routes'
 
 export const app = fastify()
 
+// Configuração Completa do CORS
+app.register(cors, {
+  origin: true, // Permite todas as origens (apenas para desenvolvimento)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Permite envio de cookies
+})
+
+// Configuração do JWT
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
@@ -21,13 +31,16 @@ app.register(fastifyJwt, {
   },
 })
 
+// Configuração de Cookies
 app.register(fastifyCookie)
 
+// Rotas
 app.register(usersRoutes)
 app.register(contractRoutes)
 app.register(driversRoutes)
 app.register(announcementRoutes)
 
+// Tratamento de erros
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply
