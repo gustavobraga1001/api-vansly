@@ -1,4 +1,4 @@
-import { makeGetAllAnnouncementsUseCase } from '@/use-cases/factories/make-get-specific-announcement'
+import { makeGetAllAnnouncementsUseCase } from '@/use-cases/factories/make-get-all-announcements'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function getAllAnnouncement(
