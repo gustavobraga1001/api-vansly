@@ -3,6 +3,14 @@ import { Prisma } from '@prisma/client'
 import { AnnouncementRepository } from '../announcement-repository'
 
 export class PrismaAnnouncementRepository implements AnnouncementRepository {
+  async findById(announcementId: string) {
+    const announcements = await prisma.announcement.findFirst({
+      where: { id: announcementId },
+    })
+
+    return announcements
+  }
+
   async findAll() {
     const announcements = await prisma.announcement.findMany()
 

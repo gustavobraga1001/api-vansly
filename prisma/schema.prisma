@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Period {
+  MANHA
+  TARDE
+  NOITE
+}
+
 model User {
   id            String     @id @default(uuid())
   name          String
@@ -15,6 +21,7 @@ model User {
   created_at    DateTime   @default(now())
   driver        Driver?
   contracts     Contract[]
+  absence       Absence[]
 
   @@map("users")
 }
@@ -29,13 +36,14 @@ model Driver {
   contracts    Contract[]
   announcement Announcement?
   vehicle      Vehicle[]
+  Route        Route[]
 
   @@map("drivers")
 }
 
 model Contract {
   id            String   @id @default(uuid())
-  shift         String
+  period        Period
   boarding      String
   landing       String
   institution   String?
@@ -76,6 +84,49 @@ model Vehicle {
   driver       Driver        @relation(fields: [driver_id], references: [id])
   Announcement Announcement?
   driver_id    String
+  routes       Route[]
 
   @@map("vehicles")
+}
+
+model Absence {
+  id              String   @id @default(uuid())
+  date_of_absence DateTime
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("absences")
+}
+
+model Route {
+  id     String   @id @default(uuid())
+  date   DateTime
+  period Period
+
+  driver     Driver      @relation(fields: [driver_id], references: [id])
+  vehicle    Vehicle     @relation(fields: [vehicle_id], references: [id])
+  driver_id  String
+  vehicle_id String
+  RouteStop  RouteStop[]
+
+  @@map("routes")
+}
+
+model RouteStop {
+  id String @id @default(uuid())
+
+  route    Route  @relation(fields: [route_id], references: [id])
+  stop     Stop   @relation(fields: [stop_id], references: [id])
+  route_id String
+  stop_id  String
+}
+
+model Stop {
+  id        String      @id @default(uuid())
+  address   String
+  status    Boolean
+  routeStop RouteStop[]
+
+  @@map("stops")
 }

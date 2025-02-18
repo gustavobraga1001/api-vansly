@@ -1,0 +1,72 @@
+import { AnnouncementRepository } from '@/repositories/announcement-repository'
+import { DriversRepository } from '@/repositories/drivers-repository'
+import { UsersRepository } from '@/repositories/users-repository'
+import { VehiclesRepository } from '@/repositories/vehicles-repository'
+import { Decimal } from '@prisma/client/runtime/library'
+
+interface GetAnnouncementsResponse {
+  announcement: {
+    id: string
+    title: string
+    stars: number
+    city: string
+    monthlyAmount: number
+    driver: {
+      name: string
+    }
+    vehicle: {
+      model: string
+    }
+  }
+}
+
+export class GetSpecificAnnouncementUseCase {
+  constructor(
+    private announcementRepository: AnnouncementRepository,
+    private driversRepository: DriversRepository,
+    private vehiclesRepository: VehiclesRepository,
+    private usersRepository: UsersRepository,
+  ) {}
+
+  async execute(announcementId: string): Promise<GetAnnouncementsResponse> {
+    const announcement =
+      await this.announcementRepository.findById(announcementId)
+
+    if (!announcement) {
+      throw new Error('Announcement not found')
+    }
+
+    // Buscando driver e vehicle em paralelo
+    const [driver, vehicle] = await Promise.all([
+      this.driversRepository.findById(announcement.driver_id),
+      this.vehiclesRepository.findById(announcement.vehicle_id),
+    ])
+
+    if (!driver || !vehicle) {
+      throw new Error('Driver or vehicle not found')
+    }
+
+    // Buscando o usuário associado ao driver
+    const user = await this.usersRepository.findById(driver.user_id)
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    return {
+      announcement: {
+        id: announcement.id,
+        title: announcement.title,
+        stars: (announcement.stars as Decimal).toNumber(), // Converter Decimal para number
+        city: announcement.city,
+        monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number
+        driver: {
+          name: user.name,
+        },
+        vehicle: {
+          model: vehicle.model,
+        },
+      },
+    }
+  }
+}

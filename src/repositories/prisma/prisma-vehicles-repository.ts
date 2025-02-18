@@ -3,6 +3,16 @@ import { Prisma, Vehicle } from '@prisma/client'
 import { VehiclesRepository } from '../vehicles-repository'
 
 export class PrismaRegisterVehiclesRepository implements VehiclesRepository {
+  async findByDriverId(driverId: string): Promise<Vehicle | null> {
+    const vehicle = await prisma.vehicle.findFirst({
+      where: {
+        driver_id: driverId,
+      },
+    })
+
+    return vehicle
+  }
+
   async findById(vehicleId: string): Promise<Vehicle | null> {
     const vehicle = await prisma.vehicle.findFirst({
       where: {

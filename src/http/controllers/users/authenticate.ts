@@ -35,6 +35,8 @@ export async function authenticate(
       },
     )
 
+    console.log(token, refreshToken)
+
     return reply
       .setCookie('refreshToken', refreshToken, {
         path: '/',
