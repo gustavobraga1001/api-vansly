@@ -3,6 +3,16 @@ import { Prisma } from '@prisma/client'
 import { AnnouncementRepository } from '../announcement-repository'
 
 export class PrismaAnnouncementRepository implements AnnouncementRepository {
+  async findByDriverId(driverId: string) {
+    const announcement = await prisma.announcement.findFirst({
+      where: {
+        driver_id: driverId,
+      },
+    })
+
+    return announcement
+  }
+
   async findById(announcementId: string) {
     const announcements = await prisma.announcement.findFirst({
       where: { id: announcementId },
