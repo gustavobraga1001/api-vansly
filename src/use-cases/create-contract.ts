@@ -1,8 +1,8 @@
 import { ContractsRepository } from '@/repositories/contratcs-repository'
-import { Contract } from '@prisma/client'
+import { Contract, Period } from '@prisma/client'
 
 interface ContractUseCaseRequest {
-  shift: string
+  period: Period
   boarding: string
   landing: string
   institution: string
@@ -20,7 +20,7 @@ export class ContractUseCase {
   constructor(private contractsRepository: ContractsRepository) {}
 
   async execute({
-    shift,
+    period,
     boarding,
     landing,
     institution,
@@ -30,7 +30,7 @@ export class ContractUseCase {
     driverId,
   }: ContractUseCaseRequest): Promise<ContractUseCaseResponse> {
     const contract = await this.contractsRepository.create({
-      shift,
+      period,
       boarding,
       landing,
       institution,

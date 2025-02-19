@@ -7,7 +7,7 @@ export async function createContract(
   reply: FastifyReply,
 ) {
   const createContractBodySchema = z.object({
-    shift: z.string(),
+    period: z.enum(['MANHA', 'TARDE', 'NOITE']),
     boarding: z.string(),
     landing: z.string(),
     institution: z.string(),
@@ -18,7 +18,7 @@ export async function createContract(
   })
 
   const {
-    shift,
+    period,
     boarding,
     landing,
     institution,
@@ -30,7 +30,7 @@ export async function createContract(
 
   const contractUseCase = makeContractUseCase()
   await contractUseCase.execute({
-    shift,
+    period,
     boarding,
     landing,
     institution,

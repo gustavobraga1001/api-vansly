@@ -2,6 +2,7 @@ import { AnnouncementRepository } from '@/repositories/announcement-repository'
 import { DriversRepository } from '@/repositories/drivers-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { VehiclesRepository } from '@/repositories/vehicles-repository'
+import { Driver } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 
 interface GetAnnouncementsResponse {
@@ -11,7 +12,7 @@ interface GetAnnouncementsResponse {
     stars: number
     city: string
     monthlyAmount: number
-    driver: {
+    driver: Driver & {
       name: string
     }
     vehicle: {
@@ -61,6 +62,7 @@ export class GetSpecificAnnouncementUseCase {
         city: announcement.city,
         monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number
         driver: {
+          ...driver,
           name: user.name,
         },
         vehicle: {
