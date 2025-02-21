@@ -3,6 +3,15 @@ import { Prisma } from '@prisma/client'
 import { UsersRepository } from '../users-repository'
 
 export class PrismaUsersRepository implements UsersRepository {
+  async alterPassword(userId: string, hashedPassword: string) {
+    const user = await prisma.user.update({
+      where: { id: userId }, // Localiza o usuário pelo ID
+      data: { password_hash: hashedPassword }, // Atualiza a senha criptografada
+    })
+
+    return user
+  }
+
   async findById(id: string) {
     const user = await prisma.user.findUnique({
       where: {

@@ -1,24 +1,24 @@
 import { UserNotAlredyExistsError } from '@/use-cases/errors/user-not-already-exists'
-import { makeResetPasswordUseCase } from '@/use-cases/factories/make-reset-password-use-case'
+import { makeAlterPasswordUseCase } from '@/use-cases/factories/make-alter-password-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function resetPassword(
+export async function alterPassword(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const resetPasswordBodySchema = z.object({
+  const alterPasswordBodySchema = z.object({
     email: z.string().email(),
-    phoneNumber: z.string(),
+    newPassword: z.string().min(6),
   })
 
-  const { email, phoneNumber } = resetPasswordBodySchema.parse(request.body)
+  const { email, newPassword } = alterPasswordBodySchema.parse(request.body)
 
   try {
-    const resetPasswordUseCase = makeResetPasswordUseCase()
-    await resetPasswordUseCase.execute({
+    const alterPasswordUseCase = makeAlterPasswordUseCase()
+    await alterPasswordUseCase.execute({
       email,
-      phoneNumber,
+      newPassword,
     })
   } catch (err) {
     if (err instanceof UserNotAlredyExistsError) {
