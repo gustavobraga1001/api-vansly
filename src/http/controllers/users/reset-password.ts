@@ -9,17 +9,13 @@ export async function resetPassword(
 ) {
   const resetPasswordBodySchema = z.object({
     email: z.string().email(),
-    phoneNumber: z.string(),
   })
 
-  const { email, phoneNumber } = resetPasswordBodySchema.parse(request.body)
+  const { email } = resetPasswordBodySchema.parse(request.body)
 
   try {
     const resetPasswordUseCase = makeResetPasswordUseCase()
-    await resetPasswordUseCase.execute({
-      email,
-      phoneNumber,
-    })
+    await resetPasswordUseCase.execute({ email })
   } catch (err) {
     if (err instanceof UserNotAlredyExistsError) {
       return reply.status(409).send({ message: err.message })

@@ -1,12 +1,10 @@
 import { UsersRepository } from '@/repositories/users-repository'
 import { ResetPasswordRepository } from '@/repositories/reset-password-repository'
 import { UserNotAlredyExistsError } from './errors/user-not-already-exists'
-import Axios from 'axios'
-import { env } from '@/env'
+import send from '@/lib/mail'
 
 interface ResetPasswordRequest {
   email: string
-  phoneNumber: string
 }
 
 export class ResetPasswordUseCase {
@@ -15,40 +13,7 @@ export class ResetPasswordUseCase {
     private resetPasswordRepository: ResetPasswordRepository,
   ) {}
 
-  // Função para enviar SMS
-  private async sendSms(phoneNumber: string, code: string) {
-    const url = `https://rest-api.telesign.com/v1/messaging`
-
-    try {
-      const response = await Axios.post(
-        url,
-        {
-          phone_number: `55${phoneNumber}`,
-          message: `Your code is ${code}`,
-          message_type: 'ARN', // Tipo de mensagem
-        },
-        {
-          headers: {
-            Authorization: `Basic ${Buffer.from(env.CUSTOMERID + ':' + env.APIKEY).toString('base64')}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-
-      if (response.status === 200) {
-        console.log('SMS enviado com sucesso')
-      } else {
-        console.error('Erro ao enviar SMS', response.data)
-      }
-    } catch (error) {
-      console.error(
-        'Erro ao enviar SMS:',
-        error.response ? error.response.data : error.message,
-      )
-    }
-  }
-
-  async execute({ email, phoneNumber }: ResetPasswordRequest) {
+  async execute({ email }: ResetPasswordRequest) {
     const user = await this.usersRepository.findByEmail(email)
 
     if (!user) {
@@ -64,9 +29,7 @@ export class ResetPasswordUseCase {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
     // Enviar SMS com o código
-    await this.sendSms(phoneNumber, code)
-
-    console.log('E-mail enviado com sucesso!')
+    send(user.email, 'Codigo de verificação', code)
 
     // Salvar código no banco de dados
     await this.resetPasswordRepository.create({

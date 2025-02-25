@@ -5,8 +5,10 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
   JWT_SECRET: z.string(),
   PORT: z.coerce.number().default(3333),
-  CUSTOMERID: z.string(),
-  APIKEY: z.string(),
+  EMAIL_USER: z.string(),
+  EMAIL_PASS: z.string(),
+  EMAIL_PORT: z.string(),
+  EMAIL_HOST: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

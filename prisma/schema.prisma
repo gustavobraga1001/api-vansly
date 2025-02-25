@@ -14,15 +14,15 @@ enum Period {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  name          String
-  email         String         @unique
-  password_hash String
-  created_at    DateTime       @default(now())
-  driver        Driver?
-  contracts     Contract[]
-  absence       Absence[]
-  PasswordReset PasswordReset?
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password_hash  String
+  created_at     DateTime        @default(now())
+  driver         Driver?
+  contracts      Contract[]
+  absence        Absence[]
+  passwordResets PasswordReset[]
 
   @@map("users")
 }
@@ -30,7 +30,7 @@ model User {
 model PasswordReset {
   id        String   @id @default(uuid())
   user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   String   @unique
+  user_id   String
   code      String
   expiresAt DateTime
 

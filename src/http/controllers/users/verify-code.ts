@@ -1,12 +1,12 @@
 import { UserNotAlredyExistsError } from '@/use-cases/errors/user-not-already-exists'
 import { makeVerifyCodeUseCase } from '@/use-cases/factories/make-verify-code-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+import { isValid, z } from 'zod'
 
 export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
   const verifyCodeBodySchema = z.object({
     email: z.string().email(),
-    code: z.string().max(6).min(6),
+    code: z.string(),
   })
 
   const { email, code } = verifyCodeBodySchema.parse(request.body)
@@ -15,7 +15,7 @@ export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
     const verifyCodeUseCase = makeVerifyCodeUseCase()
     const isValid = await verifyCodeUseCase.execute({ email, code })
 
-    return reply.status(200).send({ isValid }) // 🟢 Agora a variável isValid é retornada corretamente
+    return reply.status(200).send(isValid) // 🟢 Agora a variável isValid é retornada corretamente
   } catch (err) {
     if (err instanceof UserNotAlredyExistsError) {
       return reply.status(409).send({ message: err.message })

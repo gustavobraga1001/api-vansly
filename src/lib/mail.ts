@@ -1,13 +1,22 @@
 import nodemailer from 'nodemailer'
 import { env } from '../env/index'
 
-export const createTransporter = () => {
-  // Defina o serviço de e-mail e as credenciais
-  return nodemailer.createTransport({
-    service: 'gmail', // Ou outro provedor, por exemplo, 'smtp.mailtrap.io'
-    auth: {
-      user: env.EMAIL_USER, // Usuário de e-mail
-      pass: env.EMAIL_PASS, // Senha do e-mail
-    },
+const transporter = nodemailer.createTransport({
+  host: env.EMAIL_HOST,
+  port: env.EMAIL_PORT,
+  auth: {
+    user: env.EMAIL_USER,
+    pass: env.EMAIL_PASS,
+  },
+})
+
+const send = (to: string, subject: string, body: string) => {
+  transporter.sendMail({
+    from: 'suporte@vansly.com',
+    to,
+    subject,
+    text: body,
   })
 }
+
+export default send

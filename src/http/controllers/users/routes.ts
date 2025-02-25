@@ -17,7 +17,7 @@ export async function usersRoutes(app: FastifyInstance) {
   app.post('/sessions', authenticate)
   app.patch('/token/refresh', refresh)
   app.patch('/forgot-password', resetPassword)
-  app.get('/verify-code', verifyCode)
+  app.post('/verify-code', verifyCode)
   app.post('/alter-password', alterPassword)
 
   app.get('/me', { onRequest: [verifyJWT] }, profile)
