@@ -1,7 +1,7 @@
 import { UserNotAlredyExistsError } from '@/use-cases/errors/user-not-already-exists'
 import { makeVerifyCodeUseCase } from '@/use-cases/factories/make-verify-code-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { isValid, z } from 'zod'
+import { z } from 'zod'
 
 export async function verifyCode(request: FastifyRequest, reply: FastifyReply) {
   const verifyCodeBodySchema = z.object({
