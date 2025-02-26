@@ -1,5 +1,6 @@
 import { AnnouncementRepository } from '@/repositories/announcement-repository'
 import { DriversRepository } from '@/repositories/drivers-repository'
+import { ImageRepository } from '@/repositories/image-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { VehiclesRepository } from '@/repositories/vehicles-repository'
 import { Decimal } from '@prisma/client/runtime/library'
@@ -11,6 +12,7 @@ interface GetAnnouncementsResponse {
     stars: number
     city: string
     monthlyAmount: number
+    images: string[] | null
     driver: {
       name: string
     }
@@ -26,6 +28,7 @@ export class GetAllAnnoucementsUseCase {
     private driversRepository: DriversRepository,
     private vehiclesRepository: VehiclesRepository,
     private usersRepository: UsersRepository,
+    private imagesRepository: ImageRepository,
   ) {}
 
   async execute(): Promise<GetAnnouncementsResponse> {
@@ -44,6 +47,10 @@ export class GetAllAnnoucementsUseCase {
         const vehicle = await this.vehiclesRepository.findById(
           announcement.vehicle_id,
         )
+        console.log(announcement.id)
+        const images = await this.imagesRepository.findByAnnouncementId(
+          announcement?.id,
+        )
 
         if (!driver || !vehicle) {
           throw new Error('erro')
@@ -60,7 +67,8 @@ export class GetAllAnnoucementsUseCase {
           title: announcement.title,
           stars: (announcement.stars as Decimal).toNumber(), // Converter Decimal para number city: announcement.city, monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number,
           city: announcement.city,
-          monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number
+          monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(),
+          images: images?.map((image) => image.url) || null,
           driver: {
             name: user.name,
           },

@@ -11,11 +11,12 @@ export async function createAnnouncement(
     stars: z.number(),
     city: z.string(),
     monthlyAmount: z.number(),
+    imagesUrl: z.array(z.string()),
     driverId: z.string(),
     vehicleId: z.string(),
   })
 
-  const { title, stars, city, monthlyAmount, driverId, vehicleId } =
+  const { title, stars, city, monthlyAmount, imagesUrl, driverId, vehicleId } =
     createAnnouncementBodySchema.parse(request.body)
 
   const createAnnouncementUseCase = makeCreateAnnouncementUseCase()
@@ -24,6 +25,7 @@ export async function createAnnouncement(
     stars,
     city,
     monthlyAmount,
+    imagesUrl,
     driverId,
     vehicleId,
   })

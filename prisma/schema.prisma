@@ -52,6 +52,15 @@ model Driver {
   @@map("drivers")
 }
 
+model Image {
+  id              String       @id @default(uuid())
+  url             String
+  announcement    Announcement @relation(fields: [announcement_id], references: [id])
+  announcement_id String
+
+  @@map("images")
+}
+
 model Contract {
   id            String   @id @default(uuid())
   period        Period
@@ -81,6 +90,7 @@ model Announcement {
   vehicle    Vehicle @relation(fields: [vehicle_id], references: [id])
   driver_id  String  @unique
   vehicle_id String  @unique
+  Image      Image[]
 
   @@map("announcements")
 }
