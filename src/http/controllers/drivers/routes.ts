@@ -4,6 +4,7 @@ import { registerDriver } from './registerDriver'
 import { registerVehicle } from './registerVehicle'
 import { createRoute } from './createRoute'
 import { confirmBoarding } from './confirmBoarding'
+import { capacityVehicle } from './capacity-vehicles'
 
 export async function driversRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
@@ -11,4 +12,5 @@ export async function driversRoutes(app: FastifyInstance) {
   app.post('/vehicles', registerVehicle)
   app.post('/create-route', createRoute)
   app.patch('/confirm-boarding', confirmBoarding)
+  app.get('/capacity-vehicle', capacityVehicle)
 }

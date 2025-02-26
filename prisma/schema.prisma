@@ -110,11 +110,12 @@ model Announcement {
 }
 
 model Vehicle {
-  id    String @id @default(uuid())
-  model String
-  plate String
-  mark  String
-  year  String
+  id             String  @id @default(uuid())
+  model          String
+  plate          String
+  mark           String
+  year           String
+  total_capacity Decimal
 
   driver       Driver        @relation(fields: [driver_id], references: [id])
   Announcement Announcement?
