@@ -1,5 +1,6 @@
 import { AnnouncementRepository } from '@/repositories/announcement-repository'
 import { DriversRepository } from '@/repositories/drivers-repository'
+import { ImageRepository } from '@/repositories/image-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { VehiclesRepository } from '@/repositories/vehicles-repository'
 import { Driver } from '@prisma/client'
@@ -12,6 +13,7 @@ interface GetAnnouncementsResponse {
     stars: number
     city: string
     monthlyAmount: number
+    images: string[] | null
     driver: Driver & {
       name: string
     }
@@ -27,6 +29,7 @@ export class GetSpecificAnnouncementUseCase {
     private driversRepository: DriversRepository,
     private vehiclesRepository: VehiclesRepository,
     private usersRepository: UsersRepository,
+    private imageRepository: ImageRepository,
   ) {}
 
   async execute(announcementId: string): Promise<GetAnnouncementsResponse> {
@@ -42,6 +45,10 @@ export class GetSpecificAnnouncementUseCase {
       this.driversRepository.findById(announcement.driver_id),
       this.vehiclesRepository.findById(announcement.vehicle_id),
     ])
+
+    const images = await this.imageRepository.findByAnnouncementId(
+      announcement.id,
+    )
 
     if (!driver || !vehicle) {
       throw new Error('Driver or vehicle not found')
@@ -61,6 +68,7 @@ export class GetSpecificAnnouncementUseCase {
         stars: (announcement.stars as Decimal).toNumber(), // Converter Decimal para number
         city: announcement.city,
         monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number
+        images: images?.map((image) => image.url) || null,
         driver: {
           ...driver,
           name: user.name,

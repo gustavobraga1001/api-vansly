@@ -71,12 +71,26 @@ model Contract {
   status        Boolean
   created_at    DateTime @default(now())
 
-  user      User   @relation(fields: [user_id], references: [id])
-  driver    Driver @relation(fields: [driver_id], references: [id])
+  user      User      @relation(fields: [user_id], references: [id])
+  driver    Driver    @relation(fields: [driver_id], references: [id])
   user_id   String
   driver_id String
+  Payment   Payment[]
 
   @@map("contracts")
+}
+
+model Payment {
+  id    String  @id @default(uuid())
+  value Decimal
+  mouth String
+
+  payment_at DateTime @default(now())
+
+  contract    Contract @relation(fields: [contract_id], references: [id])
+  contract_id String
+
+  @@map("payments")
 }
 
 model Announcement {
