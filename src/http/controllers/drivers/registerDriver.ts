@@ -10,16 +10,20 @@ export async function registerDriver(
   const registerDriverBodySchema = z.object({
     cnh: z.string().min(9).max(9),
     cpf: z.string().min(11).max(11),
+    images: z.array(z.string()),
     userId: z.string().uuid(),
   })
 
-  const { cnh, cpf, userId } = registerDriverBodySchema.parse(request.body)
+  const { cnh, cpf, images, userId } = registerDriverBodySchema.parse(
+    request.body,
+  )
 
   try {
     const registerDriverUseCase = makeRegisterDriverUseCase()
     await registerDriverUseCase.execute({
       cnh,
       cpf,
+      images,
       userId,
     })
   } catch (err) {

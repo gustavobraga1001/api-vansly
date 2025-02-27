@@ -13,6 +13,12 @@ enum Period {
   NOITE
 }
 
+enum StageContract {
+  ACEITO
+  PENDENTE
+  NEGADO
+}
+
 model User {
   id             String          @id @default(uuid())
   name           String
@@ -42,14 +48,25 @@ model Driver {
   cnh String @unique
   cpf String @unique
 
-  user         User          @relation(fields: [user_id], references: [id])
-  user_id      String        @unique
-  contracts    Contract[]
-  announcement Announcement?
-  vehicle      Vehicle[]
-  Route        Route[]
+  user           User             @relation(fields: [user_id], references: [id])
+  user_id        String           @unique
+  contracts      Contract[]
+  announcement   Announcement?
+  vehicle        Vehicle[]
+  Route          Route[]
+  ImagesDocument ImagesDocument[]
 
   @@map("drivers")
+}
+
+model ImagesDocument {
+  id  String @id @default(uuid())
+  url String
+
+  driver    Driver @relation(fields: [driver_id], references: [id])
+  driver_id String
+
+  @@map("images_documents")
 }
 
 model Image {
@@ -62,14 +79,14 @@ model Image {
 }
 
 model Contract {
-  id            String   @id @default(uuid())
+  id            String        @id @default(uuid())
   period        Period
   boarding      String
-  landing       String
-  institution   String?
+  landing       String?
+  institution   String
   monthlyAmount Decimal
-  status        Boolean
-  created_at    DateTime @default(now())
+  status        StageContract @default(PENDENTE)
+  created_at    DateTime      @default(now())
 
   user      User      @relation(fields: [user_id], references: [id])
   driver    Driver    @relation(fields: [driver_id], references: [id])
