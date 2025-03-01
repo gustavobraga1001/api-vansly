@@ -6,6 +6,7 @@ import { registerPayment } from './register-payments'
 import { getPaymentsByDriverId } from './get-payments-by-driverid'
 import { getStatistics } from './get-statistics'
 import { getContractDriver } from './get-contracts-driver'
+import { contractApprovalorRejection } from './contract-approval-or-rejection'
 
 export async function contractRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
@@ -15,4 +16,5 @@ export async function contractRoutes(app: FastifyInstance) {
   app.post('/register-payment', registerPayment)
   app.get('/get-payments/:mouth', getPaymentsByDriverId)
   app.get('/get-statistics', getStatistics)
+  app.patch('/contract-stage', contractApprovalorRejection)
 }
