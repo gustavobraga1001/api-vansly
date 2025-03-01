@@ -20,6 +20,8 @@ export class RegisterDriverUseCase {
   async execute({ cnh, cpf, images, userId }: RegisterDriverUseCaseRequest) {
     const userFindId = await this.usersRepository.findById(userId)
 
+    // console.log(userFindId)
+
     if (!userFindId) {
       throw new UserNotAlredyExistsError()
     }
@@ -29,6 +31,8 @@ export class RegisterDriverUseCase {
       cpf,
       user_id: userId,
     })
+
+    console.log(driver)
 
     await Promise.all(
       images.map((url: string) =>
