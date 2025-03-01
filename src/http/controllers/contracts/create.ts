@@ -9,10 +9,10 @@ export async function createContract(
   const createContractBodySchema = z.object({
     period: z.enum(['MANHA', 'TARDE', 'NOITE']),
     boarding: z.string(),
-    landing: z.string().optional(),
+    landing: z.string().optional().default(''),
     institution: z.string(),
     monthlyAmount: z.number(),
-    status: z.enum(['PENDENTE', 'APROVADO', 'RECUSADO']).default('PENDENTE'),
+    status: z.enum(['PENDENTE', 'ACEITO', 'NEGADO']).default('PENDENTE'),
     userId: z.string(),
     driverId: z.string(),
   })

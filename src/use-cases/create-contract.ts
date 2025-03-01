@@ -1,5 +1,5 @@
 import { ContractsRepository } from '@/repositories/contratcs-repository'
-import { Contract, Period } from '@prisma/client'
+import { Contract, Period, StageContract } from '@prisma/client'
 
 interface ContractUseCaseRequest {
   period: Period
@@ -7,7 +7,7 @@ interface ContractUseCaseRequest {
   landing: string
   institution: string
   monthlyAmount: number
-  status: boolean
+  status: StageContract
   userId: string
   driverId: string
 }
