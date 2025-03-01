@@ -36,7 +36,7 @@ export async function getRoute(request: FastifyRequest, reply: FastifyReply) {
     })
   } catch (err) {
     if (err instanceof Error) {
-      return reply.status(500).send({ message: err.message })
+      return reply.status(404).send({ message: err.message })
     } else {
       return reply.status(500).send({ message: 'An unknown error occurred' })
     }

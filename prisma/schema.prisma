@@ -176,10 +176,11 @@ model RouteStop {
 }
 
 model Stop {
-  id        String      @id @default(uuid())
-  address   String
-  status    Boolean
-  routeStop RouteStop[]
+  id           String      @id @default(uuid())
+  address      String
+  status       Boolean
+  validated_at DateTime?
+  routeStop    RouteStop[]
 
   @@map("stops")
 }

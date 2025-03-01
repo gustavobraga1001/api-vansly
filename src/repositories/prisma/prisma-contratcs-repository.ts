@@ -60,6 +60,7 @@ export class PrismaContractsRepository implements ContractsRepository {
     const contractsEnables = await prisma.contract.findMany({
       where: {
         driver_id: driverId,
+        status: 'ACEITO',
       },
     })
 

@@ -50,7 +50,9 @@ export class CreateRouteUseCase {
         period,
       )
 
-    if (!activeContracts) {
+    console.log('contratos', activeContracts)
+
+    if (activeContracts.length <= 0) {
       throw new Error('Nenhum contrato ativo encontrado para este motorista')
     }
 
@@ -59,6 +61,8 @@ export class CreateRouteUseCase {
       userId: contract.user_id,
       boarding: contract.boarding, // Usando boarding como o address
     }))
+
+    console.log(userInfos)
 
     // Buscar usuários sem faltas para o dia
     const usersWithoutAbsences = await Promise.all(
@@ -80,6 +84,7 @@ export class CreateRouteUseCase {
       }))
     })
 
+    console.log(usersWithoutAbsences)
     // Criando a rota para o motorista
     const route = await this.routesRepository.create({
       period, // Ajuste conforme necessário
@@ -97,6 +102,8 @@ export class CreateRouteUseCase {
         })
       }),
     )
+
+    console.log(stops)
 
     stops.map(async (stop) => {
       await this.routesStopsRepository.create({
