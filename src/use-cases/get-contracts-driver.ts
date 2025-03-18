@@ -4,6 +4,7 @@ import { Contract } from '@prisma/client'
 
 interface GetContractsDriverUseCaseRequest {
   userId: string
+  type: string
 }
 
 interface GetContractsDriverUseCaseResponse {
@@ -18,11 +19,23 @@ export class GetContractsDriverUseCase {
 
   async execute({
     userId,
+    type,
   }: GetContractsDriverUseCaseRequest): Promise<GetContractsDriverUseCaseResponse> {
     const driver = await this.driversRepository.findByUserId(userId)
 
     if (!driver || !driver.driver?.id) {
       throw new Error('Driver não encontrado')
+    }
+
+    if (type === 'PENDENTE') {
+      const contracts =
+        await this.contractsRepository.findPendingContractsByDriverId(
+          driver.driver.id,
+        )
+
+      return {
+        contracts,
+      }
     }
 
     const contracts =

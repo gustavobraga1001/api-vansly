@@ -6,9 +6,11 @@ export async function getContractDriver(
   reply: FastifyReply,
 ) {
   try {
+    const { type } = request.params as { type: string }
     const getContractsDriverUseCase = makeGetContractsDriverUseCase()
     const contracts = await getContractsDriverUseCase.execute({
       userId: request.user.sub,
+      type,
     })
 
     return reply.status(200).send(contracts)

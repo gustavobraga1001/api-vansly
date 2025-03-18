@@ -1,32 +1,14 @@
 import { makeGetRouteUseCase } from '@/use-cases/factories/make-get-route-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
 
 export async function getRoute(request: FastifyRequest, reply: FastifyReply) {
-  const registerDriverBodySchema = z.object({
-    date: z
-      .string() // A data vem como string
-      .refine((val) => !isNaN(new Date(val).getTime()), {
-        message: 'Invalid date format', // Se a data não for válida, o erro é retornado
-      })
-      .transform((val) => new Date(val)), // Converte para objeto Date
-    period: z.custom(
-      (val) => {
-        const validPeriods = ['MANHA', 'TARDE', 'NOITE']
-        return validPeriods.includes(val)
-      },
-      { message: 'Invalid period' },
-    ),
-  })
-
-  const { date, period } = registerDriverBodySchema.parse(request.body)
-
   try {
+    const { id } = request.params as { id: string } // Tipagem correta para 'id'
+
     const getRouteUseCase = makeGetRouteUseCase()
 
     const { stops } = await getRouteUseCase.execute({
-      date,
-      period,
+      id,
     })
 
     return reply.status(200).send({

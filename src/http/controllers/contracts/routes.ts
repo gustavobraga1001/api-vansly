@@ -12,7 +12,7 @@ export async function contractRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
   app.post('/contracts', createContract)
   app.get('/get-contract', getContract)
-  app.get('/get-contracts-driver', getContractDriver)
+  app.get('/get-contracts-driver/:type', getContractDriver)
   app.post('/register-payment', registerPayment)
   app.get('/get-payments/:mouth', getPaymentsByDriverId)
   app.get('/get-statistics', getStatistics)

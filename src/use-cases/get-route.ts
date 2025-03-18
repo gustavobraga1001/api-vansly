@@ -1,12 +1,10 @@
 import { StopsRepository } from '@/repositories/stops-repository'
-import { Period } from './create-route'
 import { RoutesRepository } from '@/repositories/routes-repository'
 import { RoutesStopsRepository } from '@/repositories/routes-stops-repository'
 import { Stop } from '@prisma/client'
 
 interface GetRouteUseCaseRequest {
-  date: Date
-  period: Period
+  id: string
 }
 
 interface GetRouteUseCaseResponse {
@@ -21,10 +19,9 @@ export class GetRouteUseCase {
   ) {}
 
   async execute({
-    date,
-    period,
+    id,
   }: GetRouteUseCaseRequest): Promise<GetRouteUseCaseResponse> {
-    const route = await this.routesRepository.findByDateAndPeriod(date, period)
+    const route = await this.routesRepository.findById(id)
 
     if (!route) {
       throw new Error('Não há uma rota ainda')

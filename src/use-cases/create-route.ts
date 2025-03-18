@@ -1,5 +1,6 @@
-import { AbsenceRepository } from '@/repositories/absence-repository'
 import { ContractsRepository } from '@/repositories/contratcs-repository'
+import { AbsenceRepository } from '@/repositories/absence-repository'
+import { DriversRepository } from '@/repositories/drivers-repository'
 import { RoutesRepository } from '@/repositories/routes-repository'
 import { RoutesStopsRepository } from '@/repositories/routes-stops-repository'
 import { StopsRepository } from '@/repositories/stops-repository'
@@ -13,7 +14,7 @@ export enum Period {
 }
 
 interface CreateRouteUseCaseRequest {
-  driverId: string
+  userId: string
   date: Date
   period: Period
 }
@@ -27,9 +28,10 @@ export class CreateRouteUseCase {
     private vehiclesRepository: VehiclesRepository,
     private stopsRepository: StopsRepository,
     private routesStopsRepository: RoutesStopsRepository,
+    private driversRepository: DriversRepository,
   ) {}
 
-  async execute({ driverId, date, period }: CreateRouteUseCaseRequest) {
+  async execute({ userId, date, period }: CreateRouteUseCaseRequest) {
     const routesExistsWithSameDateAndPeriod =
       await this.routesRepository.findByDateAndPeriod(date, period)
 
@@ -37,8 +39,18 @@ export class CreateRouteUseCase {
       throw new Error('Já existe uma rota para essa data e periodo')
     }
 
+    const driverByUserId = await this.driversRepository.findByUserId(userId)
+
+    console.log(driverByUserId?.driver)
+
+    if (!driverByUserId || driverByUserId.driver === null) {
+      throw new Error('Motorista não encontrado')
+    }
+
     // Encontrar o veículo do motorista
-    const vehicle = await this.vehiclesRepository.findByDriverId(driverId)
+    const vehicle = await this.vehiclesRepository.findByDriverId(
+      driverByUserId.driver.id,
+    )
 
     if (!vehicle) {
       throw new Error('Veículo não encontrado')
@@ -46,11 +58,9 @@ export class CreateRouteUseCase {
 
     const activeContracts =
       await this.contractRepository.findActiveContractsByDriverIdAndPeriod(
-        driverId,
+        driverByUserId.driver.id,
         period,
       )
-
-    console.log('contratos', activeContracts)
 
     if (activeContracts.length <= 0) {
       throw new Error('Nenhum contrato ativo encontrado para este motorista')
@@ -61,8 +71,6 @@ export class CreateRouteUseCase {
       userId: contract.user_id,
       boarding: contract.boarding, // Usando boarding como o address
     }))
-
-    console.log(userInfos)
 
     // Buscar usuários sem faltas para o dia
     const usersWithoutAbsences = await Promise.all(
@@ -84,12 +92,11 @@ export class CreateRouteUseCase {
       }))
     })
 
-    console.log(usersWithoutAbsences)
     // Criando a rota para o motorista
     const route = await this.routesRepository.create({
       period, // Ajuste conforme necessário
       date,
-      driver_id: driverId,
+      driver_id: driverByUserId.driver.id,
       vehicle_id: vehicle.id,
     })
 
@@ -103,13 +110,13 @@ export class CreateRouteUseCase {
       }),
     )
 
-    console.log(stops)
-
     stops.map(async (stop) => {
       await this.routesStopsRepository.create({
         route_id: route.id,
         stop_id: stop.id,
       })
     })
+
+    return { route }
   }
 }

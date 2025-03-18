@@ -3,6 +3,16 @@ import { Period, Prisma } from '@prisma/client'
 import { RoutesRepository } from '../routes-repository'
 
 export class PrismaRoutesRepository implements RoutesRepository {
+  async findById(id: string) {
+    const route = await prisma.route.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    return route
+  }
+
   async findByDateAndPeriod(date: Date, period: Period) {
     const route = await prisma.route.findFirst({
       where: {

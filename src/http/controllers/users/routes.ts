@@ -23,6 +23,6 @@ export async function usersRoutes(app: FastifyInstance) {
   app.get('/me', { onRequest: [verifyJWT] }, profile)
   app.post('/absence', { onRequest: [verifyJWT] }, createAbsence)
   app.post('/get-absences', { onRequest: [verifyJWT] }, getAbsences)
-  app.post('/get-route', { onRequest: [verifyJWT] }, getRoute)
+  app.get('/get-route/:id', { onRequest: [verifyJWT] }, getRoute)
   app.post('/logout', { onRequest: [verifyJWT] }, logout)
 }

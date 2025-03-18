@@ -6,6 +6,7 @@ import { PrismaRegisterVehiclesRepository } from '@/repositories/prisma/prisma-v
 import { PrismaStopsRepository } from '@/repositories/prisma/prisma-stops-repository'
 import { PrismaRoutesRepository } from '@/repositories/prisma/prisma-routes-repository'
 import { PrismaRoutesStopsRepository } from '@/repositories/prisma/prisma-routes-stops-repository'
+import { PrismaDriversRepository } from '@/repositories/prisma/prisma-drivers-repository'
 
 export function makeCreateRouteUseCase() {
   const absencesRepository = new PrismaAbsencesRepository()
@@ -15,6 +16,7 @@ export function makeCreateRouteUseCase() {
   const vehiclesRepository = new PrismaRegisterVehiclesRepository()
   const stopsRepository = new PrismaStopsRepository()
   const routesStopsRepository = new PrismaRoutesStopsRepository()
+  const driversRepository = new PrismaDriversRepository()
   const createAbsenceUseCase = new CreateRouteUseCase(
     absencesRepository,
     usersRepository,
@@ -23,6 +25,7 @@ export function makeCreateRouteUseCase() {
     vehiclesRepository,
     stopsRepository,
     routesStopsRepository,
+    driversRepository,
   )
 
   return createAbsenceUseCase

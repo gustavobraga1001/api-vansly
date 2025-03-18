@@ -2,6 +2,7 @@ import { Contract, Period, Prisma, StageContract } from '@prisma/client'
 
 export interface ContractsRepository {
   findActiveContractsByDriverId(driverId: string): Promise<Contract[]>
+  findPendingContractsByDriverId(driverId: string): Promise<Contract[]>
   findByUserId(userId: string): Promise<Contract | null>
   findById(contractId: string): Promise<Contract | null>
   findActiveContractsByDriverIdAndPeriod(

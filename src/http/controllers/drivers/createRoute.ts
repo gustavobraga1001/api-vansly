@@ -7,7 +7,6 @@ export async function createRoute(
   reply: FastifyReply,
 ) {
   const registerDriverBodySchema = z.object({
-    driverId: z.string().uuid(),
     date: z
       .string() // A data vem como string
       .refine((val) => !isNaN(new Date(val).getTime()), {
@@ -23,17 +22,16 @@ export async function createRoute(
     ),
   })
 
-  const { driverId, date, period } = registerDriverBodySchema.parse(
-    request.body,
-  )
+  const { date, period } = registerDriverBodySchema.parse(request.body)
 
   try {
     const createRouteUseCase = makeCreateRouteUseCase()
-    await createRouteUseCase.execute({
-      driverId,
+    const route = await createRouteUseCase.execute({
+      userId: request.user.sub,
       date,
       period,
     })
+    return reply.status(201).send(route)
   } catch (err) {
     if (err instanceof Error) {
       return reply.status(500).send({ message: err.message })
@@ -41,6 +39,4 @@ export async function createRoute(
       return reply.status(500).send({ message: 'An unknown error occurred' })
     }
   }
-
-  return reply.status(201).send()
 }

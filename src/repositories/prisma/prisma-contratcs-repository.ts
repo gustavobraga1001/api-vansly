@@ -67,6 +67,17 @@ export class PrismaContractsRepository implements ContractsRepository {
     return contractsEnables
   }
 
+  async findPendingContractsByDriverId(driverId: string) {
+    const contractsEnables = await prisma.contract.findMany({
+      where: {
+        driver_id: driverId,
+        status: 'PENDENTE',
+      },
+    })
+
+    return contractsEnables
+  }
+
   async create(data: Prisma.ContractUncheckedCreateInput) {
     const contract = await prisma.contract.create({
       data,
