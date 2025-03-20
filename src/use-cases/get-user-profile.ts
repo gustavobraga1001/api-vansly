@@ -1,7 +1,8 @@
 import { UsersRepository } from '@/repositories/users-repository'
 import { DriversRepository } from '@/repositories/drivers-repository'
-import { User, Driver } from '@prisma/client'
+import { User, Driver, ImagesDocument } from '@prisma/client'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ImageDocumentsRepository } from '@/repositories/image-documents-repository'
 
 interface GetUserProfileUseRequest {
   userId: string
@@ -16,6 +17,8 @@ interface GetUserProfileUseResponse {
     created_at: Date
     cnh?: string // Campo opcional para motoristas
     cpf?: string // Campo opcional para motoristas
+    driver_id?: string
+    docs_images?: ImagesDocument[]
   }
 }
 
@@ -28,6 +31,7 @@ export class GetUserProfileUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private driversRepository: DriversRepository,
+    private imagesDocumentRepository: ImageDocumentsRepository,
   ) {}
 
   async execute({
@@ -36,6 +40,14 @@ export class GetUserProfileUseCase {
     // Primeiramente, tenta encontrar se o usuário é um motorista
     const driverWithUser: DriverWithUser | null =
       await this.driversRepository.findByUserId(userId)
+
+    let images: ImagesDocument[] = []
+
+    if (driverWithUser?.driver) {
+      images = await this.imagesDocumentRepository.findByDriverId(
+        driverWithUser.driver.id,
+      )
+    }
 
     if (!driverWithUser || !driverWithUser.user) {
       // Se não for um motorista e o usuário não for encontrado
@@ -81,6 +93,8 @@ export class GetUserProfileUseCase {
         created_at: user.created_at, // Data de criação do usuário
         cnh: driver.cnh, // CNH do motorista
         cpf: driver.cpf, // Renavam do motorista
+        driver_id: driver.id,
+        docs_images: images,
       },
     }
   }

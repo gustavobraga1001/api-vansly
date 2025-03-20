@@ -5,6 +5,7 @@ interface RegisterVehicleUseCaseRequest {
   plate: string
   mark: string
   year: string
+  totalCapacity: number
   driverId: string
 }
 
@@ -16,6 +17,7 @@ export class RegisterVehicleUseCase {
     plate,
     mark,
     year,
+    totalCapacity,
     driverId,
   }: RegisterVehicleUseCaseRequest) {
     await this.vehiclesRepository.create({
@@ -23,6 +25,7 @@ export class RegisterVehicleUseCase {
       plate,
       mark,
       year,
+      total_capacity: totalCapacity,
       driver_id: driverId,
     })
   }

@@ -10,7 +10,12 @@ export async function registerDriver(
   const registerDriverBodySchema = z.object({
     cnh: z.string().min(9).max(9),
     cpf: z.string().min(11).max(11),
-    images: z.array(z.string()),
+    images: z.array(
+      z.object({
+        url: z.string(), // ✅ Define o nome da propriedade
+        name: z.string(), // ✅ Define o nome da propriedade
+      }),
+    ),
     userId: z.string().uuid(),
   })
 

@@ -11,10 +11,11 @@ export async function registerVehicle(
     plate: z.string(),
     mark: z.string(),
     year: z.string(),
+    totalCapacity: z.number(),
     driverId: z.string().uuid(),
   })
 
-  const { model, plate, mark, year, driverId } =
+  const { model, plate, mark, year, totalCapacity, driverId } =
     registerVehicleBodySchema.parse(request.body)
 
   try {
@@ -24,6 +25,7 @@ export async function registerVehicle(
       plate,
       mark,
       year,
+      totalCapacity,
       driverId,
     })
   } catch (err) {

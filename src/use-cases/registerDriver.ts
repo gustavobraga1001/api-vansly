@@ -3,10 +3,15 @@ import { DriversRepository } from '@/repositories/drivers-repository'
 import { UserNotAlredyExistsError } from './errors/user-not-already-exists'
 import { ImageDocumentsRepository } from '@/repositories/image-documents-repository'
 
+interface ImageDocsProps {
+  url: string
+  name: string
+}
+
 interface RegisterDriverUseCaseRequest {
   cnh: string
   cpf: string
-  images: string[]
+  images: ImageDocsProps[]
   userId: string
 }
 
@@ -32,12 +37,11 @@ export class RegisterDriverUseCase {
       user_id: userId,
     })
 
-    console.log(driver)
-
     await Promise.all(
-      images.map((url: string) =>
+      images.map((image) =>
         this.imagesDocumentsRepository.create({
-          url,
+          url: image.url,
+          name: image.name,
           driver: {
             connect: { id: driver.id },
           },
