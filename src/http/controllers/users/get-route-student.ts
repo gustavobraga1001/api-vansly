@@ -30,6 +30,7 @@ export async function getRouteStudent(
     const { stops } = await getRouteStudentUseCase.execute({
       date,
       period,
+      userId: request.user.sub,
     })
 
     return reply.status(200).send({

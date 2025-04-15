@@ -12,7 +12,6 @@ export async function createContract(
     landing: z.string().optional().default(''),
     institution: z.string(),
     monthlyAmount: z.number(),
-    status: z.enum(['PENDENTE', 'ACEITO', 'NEGADO']).default('PENDENTE'),
     userId: z.string(),
     driverId: z.string(),
   })
@@ -23,7 +22,6 @@ export async function createContract(
     landing,
     institution,
     monthlyAmount,
-    status,
     userId,
     driverId,
   } = createContractBodySchema.parse(request.body)
@@ -35,7 +33,7 @@ export async function createContract(
     landing,
     institution,
     monthlyAmount,
-    status,
+    status: 'PENDENTE',
     userId,
     driverId,
   })

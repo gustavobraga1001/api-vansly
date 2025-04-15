@@ -7,6 +7,7 @@ import { Period } from '@/@types/period'
 interface GetRouteStudentUseCaseRequest {
   date: Date
   period: Period
+  userId: string
 }
 
 interface GetRouteStudentUseCaseResponse {
@@ -23,6 +24,7 @@ export class GetRouteStudentUseCase {
   async execute({
     date,
     period,
+    userId,
   }: GetRouteStudentUseCaseRequest): Promise<GetRouteStudentUseCaseResponse> {
     const route = await this.routesRepository.findByDateAndPeriod(date, period)
 
@@ -51,8 +53,18 @@ export class GetRouteStudentUseCase {
     ) // Filtra qualquer valor undefined
     const validStops = stops.filter((stop): stop is Stop => stop !== undefined)
 
-    return {
-      stops: validStops,
+    const stopUserId = validStops.filter(
+      (stop): stop is Stop => stop.user_id === userId,
+    )
+
+    console.log('stop', stopUserId)
+
+    if (stopUserId.length !== 0) {
+      return {
+        stops: validStops,
+      }
+    } else {
+      throw new Error('Não há uma rota disponivel para você')
     }
   }
 }

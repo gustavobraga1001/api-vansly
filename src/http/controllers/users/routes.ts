@@ -12,6 +12,7 @@ import { resetPassword } from './reset-password'
 import { verifyCode } from './verify-code'
 import { alterPassword } from './alter-password'
 import { getRouteStudent } from './get-route-student'
+import { editProfile } from './edit-profile'
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', register)
@@ -27,4 +28,5 @@ export async function usersRoutes(app: FastifyInstance) {
   app.get('/get-route/:id', { onRequest: [verifyJWT] }, getRoute)
   app.post('/get-route-student', { onRequest: [verifyJWT] }, getRouteStudent)
   app.post('/logout', { onRequest: [verifyJWT] }, logout)
+  app.patch('/edit-profile', { onRequest: [verifyJWT] }, editProfile)
 }

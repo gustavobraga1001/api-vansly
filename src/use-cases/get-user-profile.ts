@@ -14,6 +14,7 @@ interface GetUserProfileUseResponse {
     name: string
     email: string
     password_hash?: string
+    urlPhoto?: string
     created_at: Date
     cnh?: string // Campo opcional para motoristas
     cpf?: string // Campo opcional para motoristas
@@ -62,6 +63,7 @@ export class GetUserProfileUseCase {
           id: user.id,
           name: user.name,
           email: user.email,
+          urlPhoto: user.urlPhoto ?? undefined,
           password_hash: user.password_hash,
           created_at: user.created_at,
         },
@@ -77,6 +79,7 @@ export class GetUserProfileUseCase {
           id: user.id,
           name: user.name,
           email: user.email,
+          urlPhoto: user.urlPhoto ?? undefined,
           password_hash: user.password_hash,
           created_at: user.created_at,
         },
@@ -90,6 +93,7 @@ export class GetUserProfileUseCase {
         name: user.name, // Nome do usuário associado
         email: user.email, // Email do usuário associado
         password_hash: user.password_hash, // Password hash do usuário
+        urlPhoto: user.urlPhoto ?? undefined,
         created_at: user.created_at, // Data de criação do usuário
         cnh: driver.cnh, // CNH do motorista
         cpf: driver.cpf, // Renavam do motorista

@@ -4,6 +4,7 @@ import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-reposi
 import { PrismaRegisterVehiclesRepository } from '@/repositories/prisma/prisma-vehicles-repository'
 import { GetSpecificAnnouncementUseCase } from '../get-specific-announcement'
 import { PrismaUploadImageRepository } from '@/repositories/prisma/prisma-image-repository'
+import { PrismaContractsRepository } from '@/repositories/prisma/prisma-contratcs-repository'
 
 export function makeGetSpecificAnnouncementUseCase() {
   const announcementRepository = new PrismaAnnouncementRepository()
@@ -11,12 +12,14 @@ export function makeGetSpecificAnnouncementUseCase() {
   const usersRepository = new PrismaUsersRepository()
   const vehiclesRepository = new PrismaRegisterVehiclesRepository()
   const imageRepository = new PrismaUploadImageRepository()
+  const contractsRepository = new PrismaContractsRepository()
   const getSpecificAnnouncementUseCase = new GetSpecificAnnouncementUseCase(
     announcementRepository,
     driversRepository,
     vehiclesRepository,
     usersRepository,
     imageRepository,
+    contractsRepository,
   )
 
   return getSpecificAnnouncementUseCase

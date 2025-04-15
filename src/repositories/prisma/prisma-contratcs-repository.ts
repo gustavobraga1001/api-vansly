@@ -4,7 +4,7 @@ import { ContractsRepository } from '../contratcs-repository'
 
 export class PrismaContractsRepository implements ContractsRepository {
   async findById(contractId: string) {
-    const contract = await prisma.contract.findUnique({
+    const contract = await prisma.contract.findFirst({
       where: {
         id: contractId,
       },

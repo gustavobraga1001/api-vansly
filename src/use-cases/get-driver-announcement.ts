@@ -26,7 +26,13 @@ export class GetDriverAnnouncementUseCase {
         title: announcement.title,
         city: announcement.city,
         monthlyAmount: (announcement.monthlyAmount as Decimal).toNumber(), // Converter Decimal para number
-        images: images?.map((image) => image.url) || null,
+        images:
+          images?.map((image) => {
+            return {
+              id: image.id,
+              url: image.url,
+            }
+          }) || null,
       },
     }
   }

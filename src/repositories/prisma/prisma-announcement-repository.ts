@@ -27,6 +27,17 @@ export class PrismaAnnouncementRepository implements AnnouncementRepository {
     return announcements
   }
 
+  async edit(data: Prisma.AnnouncementUncheckedCreateInput) {
+    const announcement = await prisma.announcement.update({
+      where: {
+        driver_id: data.driver_id,
+      },
+      data,
+    })
+
+    return announcement
+  }
+
   async create(data: Prisma.AnnouncementUncheckedCreateInput) {
     const announcement = await prisma.announcement.create({
       data,

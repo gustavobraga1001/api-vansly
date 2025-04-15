@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { Period, Prisma } from '@prisma/client'
 import { RoutesRepository } from '../routes-repository'
+import { startOfDay, endOfDay } from 'date-fns'
 
 export class PrismaRoutesRepository implements RoutesRepository {
   async findById(id: string) {
@@ -16,10 +17,15 @@ export class PrismaRoutesRepository implements RoutesRepository {
   async findByDateAndPeriod(date: Date, period: Period) {
     const route = await prisma.route.findFirst({
       where: {
-        date,
+        date: {
+          gte: startOfDay(date), // Data maior ou igual ao início do dia
+          lte: endOfDay(date), // Data menor ou igual ao fim do dia
+        },
         period,
       },
     })
+
+    console.log(route)
 
     return route
   }

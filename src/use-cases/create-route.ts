@@ -41,8 +41,6 @@ export class CreateRouteUseCase {
 
     const driverByUserId = await this.driversRepository.findByUserId(userId)
 
-    console.log(driverByUserId?.driver)
-
     if (!driverByUserId || driverByUserId.driver === null) {
       throw new Error('Motorista não encontrado')
     }
@@ -80,11 +78,14 @@ export class CreateRouteUseCase {
           userInfo.userId,
           date,
         )
+        console.log('Faltas', absence, userInfo.boarding)
         return { user: { ...user, boarding: userInfo.boarding }, absence }
       }),
     ).then((results) => {
       // Filtra os usuários que não têm falta
+      console.log('r', results)
       const usersWithNoAbsence = results.filter((item) => !item.absence)
+      console.log('a', usersWithNoAbsence)
       return usersWithNoAbsence.map((item) => ({
         userId: item.user?.id,
         name: item.user?.name,
@@ -103,9 +104,18 @@ export class CreateRouteUseCase {
     // Criando os stops para os usuários sem faltas
     const stops = await Promise.all(
       usersWithoutAbsences.map(async (user) => {
+        if (!user.userId) {
+          throw new Error('User ID is missing')
+        }
+
         return await this.stopsRepository.create({
-          address: user.boarding, // Usando boarding (endereço)
-          status: false, // Ajuste conforme necessário
+          address: user.boarding,
+          status: false,
+          user: {
+            connect: {
+              id: user.userId, // Associa o usuário pelo ID
+            },
+          },
         })
       }),
     )
