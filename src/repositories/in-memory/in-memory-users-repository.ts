@@ -14,14 +14,9 @@ export class InmemoryUsersRepository implements UsersRepository {
     return user
   }
 
-  async findById(id: string) {
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    })
-
-    return user
+  async findById(idUser: string) {
+    const user = this.items.find((item) => item.id === idUser)
+    return user ?? null
   }
 
   async findByEmail(email: string) {

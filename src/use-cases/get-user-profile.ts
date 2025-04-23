@@ -38,7 +38,6 @@ export class GetUserProfileUseCase {
   async execute({
     userId,
   }: GetUserProfileUseRequest): Promise<GetUserProfileUseResponse> {
-    // Primeiramente, tenta encontrar se o usuário é um motorista
     const driverWithUser: DriverWithUser | null =
       await this.driversRepository.findByUserId(userId)
 
