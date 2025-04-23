@@ -31,6 +31,12 @@ export class RegisterDriverUseCase {
       throw new UserNotAlredyExistsError()
     }
 
+    const userIsDriver = await this.driversRepository.findByUserId(userId)
+
+    if (userIsDriver) {
+      throw new Error('Driver is exists')
+    }
+
     const driver = await this.driversRepository.create({
       cnh,
       cpf,

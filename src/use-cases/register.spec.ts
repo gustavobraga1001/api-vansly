@@ -38,7 +38,7 @@ describe('Register Use Case', () => {
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
 
-  it('should not be ableto register with same email twice', async () => {
+  it('should not be able to register with same email twice', async () => {
     const email = 'jonhdoe@example.com'
 
     await sut.execute({
