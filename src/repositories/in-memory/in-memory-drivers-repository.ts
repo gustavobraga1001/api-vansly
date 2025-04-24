@@ -1,6 +1,7 @@
 import { Driver, Prisma } from '@prisma/client'
 import { DriversRepository } from '../drivers-repository'
 import { InmemoryUsersRepository } from './in-memory-users-repository'
+import { randomUUID } from 'crypto'
 
 export class InmemoryDriversRepository implements DriversRepository {
   items: Driver[] = []
@@ -9,10 +10,10 @@ export class InmemoryDriversRepository implements DriversRepository {
 
   async create(data: Prisma.DriverUncheckedCreateInput) {
     const driver = {
-      id: 'driver-1',
+      id: randomUUID(),
       cnh: data.cnh,
       cpf: data.cpf,
-      user_id: 'user-1',
+      user_id: data.user_id,
     }
 
     this.items.push(driver)

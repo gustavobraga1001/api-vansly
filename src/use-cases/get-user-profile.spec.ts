@@ -49,7 +49,6 @@ describe('Get User Profile Use Case', () => {
     })
 
     await inMemoryDriverRepository.create({
-      id: 'driver-1',
       cpf: '12345678900',
       cnh: '12345678900',
       user_id: createdUser.id,
@@ -59,7 +58,7 @@ describe('Get User Profile Use Case', () => {
       userId: createdUser.id,
     })
 
-    expect(user.cnh).toEqual('12345678900')
+    await expect(user.cnh).toEqual('12345678900')
   })
 
   it('should be able to get driver docs images', async () => {
@@ -88,7 +87,7 @@ describe('Get User Profile Use Case', () => {
       userId: createdUser.id,
     })
 
-    expect(user.docs_images).toEqual(
+    await expect(user.docs_images).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           url: expect.any(String),

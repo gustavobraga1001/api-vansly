@@ -56,7 +56,7 @@ describe('Register Driver Use Case', () => {
       images: [],
     })
 
-    expect(() =>
+    await expect(() =>
       sut.execute({
         cpf: '12345678800',
         cnh: '12345478800',
