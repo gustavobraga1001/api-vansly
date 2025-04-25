@@ -70,9 +70,9 @@ describe('Get Contracts Driver Use Case', () => {
     })
 
     const createdContract = await contractsRepository.create({
-      boarding: 'St. Times Square, 2200',
-      landing: 'St. Times Square, 2200',
-      institution: 'Harvard',
+      boarding: '1616 Pine St, San Francisco, CA 94109',
+      landing: '1616 Pine St, San Francisco, CA 94109',
+      institution: 'San Francisco State University (SFSU)',
       monthlyAmount: createdAnnouncement.monthlyAmount.toNumber(),
       period: 'MANHA',
       status: 'PENDENTE',
@@ -81,9 +81,9 @@ describe('Get Contracts Driver Use Case', () => {
     })
 
     const createdContract2 = await contractsRepository.create({
-      boarding: 'St. Times Square, 2200',
-      landing: 'St. Times Square, 2200',
-      institution: 'Harvard',
+      boarding: '2745 Mission St, San Francisco, CA 94110',
+      landing: '2745 Mission St, San Francisco, CA 94110',
+      institution: 'San Francisco State University (SFSU)',
       monthlyAmount: createdAnnouncement.monthlyAmount.toNumber(),
       period: 'TARDE',
       status: 'PENDENTE',
