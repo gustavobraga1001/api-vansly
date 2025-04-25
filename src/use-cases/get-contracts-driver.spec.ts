@@ -5,16 +5,16 @@ import { InMemoryAnnouncementRepository } from '@/repositories/in-memory/in-memo
 import { beforeEach, describe, expect, it } from 'vitest'
 import { hash } from 'bcryptjs'
 import { InMemoryContractsRepository } from '@/repositories/in-memory/in-memory-contracts-repository copy'
-import { GetContractUseCase } from './get-contract'
+import { GetContractsDriverUseCase } from './get-contracts-driver'
 
 let usersRepository: InmemoryUsersRepository
 let driverRepository: InmemoryDriversRepository
 let vehiclesRepository: InMemoryVehiclesRepository
 let announcementRepository: InMemoryAnnouncementRepository
 let contractsRepository: InMemoryContractsRepository
-let sut: GetContractUseCase
+let sut: GetContractsDriverUseCase
 
-describe('Get Contract Use Case', () => {
+describe('Get Contracts Driver Use Case', () => {
   beforeEach(() => {
     usersRepository = new InmemoryUsersRepository()
     driverRepository = new InmemoryDriversRepository(usersRepository)
@@ -22,15 +22,10 @@ describe('Get Contract Use Case', () => {
     announcementRepository = new InMemoryAnnouncementRepository()
     contractsRepository = new InMemoryContractsRepository()
 
-    sut = new GetContractUseCase(
-      contractsRepository,
-      driverRepository,
-      announcementRepository,
-      usersRepository,
-    )
+    sut = new GetContractsDriverUseCase(contractsRepository, driverRepository)
   })
 
-  it('should be able to get a contract', async () => {
+  it('should be able to get a driver pending contracts', async () => {
     const createdUser1 = await usersRepository.create({
       name: 'Jonw Doe',
       email: 'jonwdoe@gmail.com',
@@ -64,8 +59,14 @@ describe('Get Contract Use Case', () => {
 
     const createdUser2 = await usersRepository.create({
       name: 'Mark Mule',
-      email: 'markmule@gmail.com',
+      email: 'markmule@example.com',
       password_hash: await hash('654321', 6),
+    })
+
+    const createdUser3 = await usersRepository.create({
+      name: 'Ralph Machio',
+      email: 'ralph@example.com',
+      password_hash: await hash('656565', 6),
     })
 
     const createdContract = await contractsRepository.create({
@@ -79,13 +80,35 @@ describe('Get Contract Use Case', () => {
       user_id: createdUser2.id,
     })
 
-    const { contract } = await sut.execute({ userId: createdUser2.id })
+    const createdContract2 = await contractsRepository.create({
+      boarding: 'St. Times Square, 2200',
+      landing: 'St. Times Square, 2200',
+      institution: 'Harvard',
+      monthlyAmount: createdAnnouncement.monthlyAmount.toNumber(),
+      period: 'TARDE',
+      status: 'PENDENTE',
+      driver_id: createdDriver1.id,
+      user_id: createdUser3.id,
+    })
 
-    expect(contract).toEqual(
-      expect.objectContaining({
-        user_id: createdUser2.id,
-        period: createdContract.period,
-      }),
+    const { contracts } = await sut.execute({
+      userId: createdUser1.id,
+      type: 'PENDENTE',
+    })
+
+    expect(contracts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          user_id: createdUser2.id,
+          period: createdContract.period,
+          status: 'PENDENTE',
+        }),
+        expect.objectContaining({
+          user_id: createdUser3.id,
+          period: createdContract2.period,
+          status: 'PENDENTE',
+        }),
+      ]),
     )
   })
 })
