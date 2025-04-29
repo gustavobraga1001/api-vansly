@@ -44,6 +44,7 @@ export class GetPaymentsByDriverId {
 
         return {
           name: user?.name, // Certifique-se de que 'user' é válido
+          user_id: user?.id,
           payment,
           monthlyAmount: contract.monthlyAmount,
           venciment: contract.created_at,

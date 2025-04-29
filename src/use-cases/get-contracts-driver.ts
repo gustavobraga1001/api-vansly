@@ -1,5 +1,6 @@
 import { ContractsRepository } from '@/repositories/contratcs-repository'
 import { DriversRepository } from '@/repositories/drivers-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { Contract } from '@prisma/client'
 
 interface GetContractsDriverUseCaseRequest {
@@ -15,6 +16,7 @@ export class GetContractsDriverUseCase {
   constructor(
     private contractsRepository: ContractsRepository,
     private driversRepository: DriversRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({
@@ -38,10 +40,24 @@ export class GetContractsDriverUseCase {
       }
     }
 
-    const contracts =
+    const contractsActives =
       await this.contractsRepository.findActiveContractsByDriverId(
         driver.driver.id,
       )
+
+    const contracts = await Promise.all(
+      contractsActives.map(async (contract) => {
+        const user = await this.usersRepository.findById(contract.user_id)
+        return {
+          ...contract,
+          user: {
+            id: user?.id,
+            name: user?.name,
+            email: user?.email,
+          },
+        }
+      }),
+    )
 
     return {
       contracts,
