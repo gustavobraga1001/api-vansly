@@ -33,7 +33,7 @@ describe('Register Driver Use Case', () => {
     })
 
     const { driver } = await sut.execute({
-      cpf: '12345678900',
+      cpf: '123456789',
       cnh: '12345678900',
       userId: createdUser.id,
       images: [],
