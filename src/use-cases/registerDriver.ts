@@ -25,15 +25,13 @@ export class RegisterDriverUseCase {
   async execute({ cnh, cpf, images, userId }: RegisterDriverUseCaseRequest) {
     const userFindId = await this.usersRepository.findById(userId)
 
-    // console.log(userFindId)
-
     if (!userFindId) {
       throw new UserNotAlredyExistsError()
     }
 
     const userIsDriver = await this.driversRepository.findByUserId(userId)
 
-    if (userIsDriver) {
+    if (userIsDriver?.driver !== null) {
       throw new Error('Driver is exists')
     }
 
