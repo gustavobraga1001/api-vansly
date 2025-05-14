@@ -18,15 +18,6 @@ export class GetAbsencesUseCase {
       throw new Error('erro')
     }
 
-    // const absencesDays = await Promise.all(
-    //   absences.map(async (absence) => {
-    //     console.log(absence)
-    //     return {
-    //       date: absence.date_of_absence,
-    //     }
-    //   }),
-    // )
-
     return { absences }
   }
 }

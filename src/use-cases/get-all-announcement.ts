@@ -47,7 +47,6 @@ export class GetAllAnnoucementsUseCase {
         const vehicle = await this.vehiclesRepository.findById(
           announcement.vehicle_id,
         )
-        console.log(announcement.id)
         const images = await this.imagesRepository.findByAnnouncementId(
           announcement?.id,
         )

@@ -30,11 +30,8 @@ export class VerifyCodeUseCase {
       throw new Error('Código inválido')
     }
 
-    // console.log(new Date() < codeVerify.expiresAt)
-
     // Verificar se o código ainda é válido
     if (codeVerify.expiresAt < new Date()) {
-      console.log('caius')
       throw new Error('Código expirado')
     }
 

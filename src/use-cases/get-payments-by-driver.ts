@@ -55,8 +55,6 @@ export class GetPaymentsByDriverId {
     // Filtra valores nulos antes de retornar
     const validPayments = payments.filter((payment) => payment !== null)
 
-    console.log(validPayments)
-
     return validPayments
   }
 }

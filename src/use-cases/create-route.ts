@@ -78,14 +78,11 @@ export class CreateRouteUseCase {
           userInfo.userId,
           date,
         )
-        console.log('Faltas', absence, userInfo.boarding)
         return { user: { ...user, boarding: userInfo.boarding }, absence }
       }),
     ).then((results) => {
       // Filtra os usuários que não têm falta
-      console.log('r', results)
       const usersWithNoAbsence = results.filter((item) => !item.absence)
-      console.log('a', usersWithNoAbsence)
       return usersWithNoAbsence.map((item) => ({
         userId: item.user?.id,
         name: item.user?.name,

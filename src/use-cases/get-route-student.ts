@@ -47,7 +47,6 @@ export class GetRouteStudentUseCase {
           )
           throw new Error('Parada não encontrada')
         }
-        console.log(`Parada encontrada: ${JSON.stringify(stop)}`)
         return stop
       }),
     ) // Filtra qualquer valor undefined
@@ -56,8 +55,6 @@ export class GetRouteStudentUseCase {
     const stopUserId = validStops.filter(
       (stop): stop is Stop => stop.user_id === userId,
     )
-
-    console.log('stop', stopUserId)
 
     if (stopUserId.length !== 0) {
       return {

@@ -36,8 +36,6 @@ describe('Get User Profile Use Case', () => {
       userId: createdUser.id,
     })
 
-    console.log(user.name)
-
     expect(user.name).toEqual('Jonw Doe')
   })
 

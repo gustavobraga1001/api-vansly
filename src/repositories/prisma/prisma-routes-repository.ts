@@ -25,8 +25,6 @@ export class PrismaRoutesRepository implements RoutesRepository {
       },
     })
 
-    console.log(route)
-
     return route
   }
 

@@ -42,7 +42,6 @@ export class GetRouteUseCase {
           )
           throw new Error('Parada não encontrada')
         }
-        console.log(`Parada encontrada: ${JSON.stringify(stop)}`)
         return stop
       }),
     ) // Filtra qualquer valor undefined

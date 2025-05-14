@@ -20,8 +20,6 @@ describe('Register Driver (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .send()
 
-    console.log(userResponse.body.user.id)
-
     const response = await request(app.server)
       .post('/drivers')
       .set('Authorization', `Bearer ${token}`)

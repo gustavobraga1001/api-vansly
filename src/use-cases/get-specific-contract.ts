@@ -8,7 +8,6 @@ export class GetSpecificContractUseCase {
   ) {}
 
   async execute(contractId: string) {
-    console.log(contractId)
     const contract = await this.contractsRepository.findById(contractId)
 
     if (!contract) {

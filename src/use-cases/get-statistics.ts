@@ -37,12 +37,6 @@ export class GetStatistics {
       }
     })
 
-    const { MANHA, TARDE, NOITE } = amounts
-
-    console.log('Manhã:', MANHA)
-    console.log('Tarde:', TARDE)
-    console.log('Noite:', NOITE)
-
     return amounts
   }
 }

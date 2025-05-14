@@ -20,8 +20,6 @@ export class ResetPasswordUseCase {
       throw new UserNotAlredyExistsError()
     }
 
-    console.log(user)
-
     // Gerar código de 6 dígitos
     const code = Math.floor(100000 + Math.random() * 900000).toString()
 

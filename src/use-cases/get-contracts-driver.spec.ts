@@ -22,7 +22,11 @@ describe('Get Contracts Driver Use Case', () => {
     announcementRepository = new InMemoryAnnouncementRepository()
     contractsRepository = new InMemoryContractsRepository()
 
-    sut = new GetContractsDriverUseCase(contractsRepository, driverRepository)
+    sut = new GetContractsDriverUseCase(
+      contractsRepository,
+      driverRepository,
+      usersRepository,
+    )
   })
 
   it('should be able to get a driver pending contracts', async () => {
