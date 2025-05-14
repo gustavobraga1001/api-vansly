@@ -31,7 +31,9 @@ export class RegisterDriverUseCase {
 
     const userIsDriver = await this.driversRepository.findByUserId(userId)
 
-    if (userIsDriver?.driver !== null) {
+    console.log('userDriver', userIsDriver)
+
+    if (userIsDriver?.driver) {
       throw new Error('Driver is exists')
     }
 
