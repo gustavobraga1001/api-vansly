@@ -16,7 +16,7 @@ export class InMemoryContractsRepository implements ContractsRepository {
       monthlyAmount: new Decimal(data.monthlyAmount.toString()),
       driver_id: data.driver_id,
       user_id: data.user_id,
-      status: 'PENDENTE',
+      status: data.status ?? 'PENDENTE',
       created_at: new Date(),
     }
 
