@@ -5,16 +5,16 @@ import { InMemoryAnnouncementRepository } from '@/repositories/in-memory/in-memo
 import { beforeEach, describe, expect, it } from 'vitest'
 import { hash } from 'bcryptjs'
 import { InMemoryContractsRepository } from '@/repositories/in-memory/in-memory-contracts-repository copy'
-import { ContractUseCase } from './create-contract'
+import { GetStatistics } from './get-statistics'
 
 let usersRepository: InmemoryUsersRepository
 let driverRepository: InmemoryDriversRepository
 let vehiclesRepository: InMemoryVehiclesRepository
 let announcementRepository: InMemoryAnnouncementRepository
 let contractsRepository: InMemoryContractsRepository
-let sut: ContractUseCase
+let sut: GetStatistics
 
-describe('Create Contract Use Case', () => {
+describe('Get Statistics Use Case', () => {
   beforeEach(() => {
     usersRepository = new InmemoryUsersRepository()
     driverRepository = new InmemoryDriversRepository(usersRepository)
@@ -22,10 +22,10 @@ describe('Create Contract Use Case', () => {
     announcementRepository = new InMemoryAnnouncementRepository()
     contractsRepository = new InMemoryContractsRepository()
 
-    sut = new ContractUseCase(contractsRepository)
+    sut = new GetStatistics(contractsRepository, driverRepository)
   })
 
-  it('should be able to create a contract', async () => {
+  it('should be able to get statistics', async () => {
     const createdUser1 = await usersRepository.create({
       name: 'Jonw Doe',
       email: 'jonwdoe@gmail.com',
@@ -63,21 +63,43 @@ describe('Create Contract Use Case', () => {
       password_hash: await hash('654321', 6),
     })
 
-    const { contract } = await sut.execute({
+    const createdUser3 = await usersRepository.create({
+      name: 'John Snow',
+      email: 'snow@gmail.com',
+      password_hash: await hash('453627', 6),
+    })
+
+    await contractsRepository.create({
       boarding: 'St. Times Square, 2200',
       landing: 'St. Times Square, 2200',
       institution: 'Harvard',
       monthlyAmount: createdAnnouncement.monthlyAmount.toNumber(),
       period: 'MANHA',
-      status: 'PENDENTE',
-      driverId: createdDriver1.id,
-      userId: createdUser2.id,
+      status: 'ACEITO',
+      driver_id: createdDriver1.id,
+      user_id: createdUser2.id,
     })
 
-    expect(contract).toEqual(
+    await contractsRepository.create({
+      boarding: 'St. Times Square, 2230',
+      landing: 'St. Times Square, 2230',
+      institution: 'Harvard',
+      monthlyAmount: createdAnnouncement.monthlyAmount.toNumber(),
+      period: 'TARDE',
+      status: 'ACEITO',
+      driver_id: createdDriver1.id,
+      user_id: createdUser3.id,
+    })
+
+    const amounts = await sut.execute({
+      userId: createdUser1.id,
+    })
+
+    expect(amounts).toEqual(
       expect.objectContaining({
-        driver_id: createdDriver1.id,
-        user_id: createdUser2.id,
+        MANHA: expect.any(Number),
+        TARDE: expect.any(Number),
+        NOITE: expect.any(Number),
       }),
     )
   })
