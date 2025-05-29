@@ -13,7 +13,7 @@ export const app = fastify()
 
 // Configuração Completa do CORS
 app.register(cors, {
-  origin: 'https://vite-vansly-git-main-gustavobraga1001s-projects.vercel.app', // Permitir todas as origens
+  origin: 'https://vite-vansly.vercel.app', // Permitir todas as origens
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
