@@ -20,29 +20,18 @@ enum StageContract {
 }
 
 model User {
-  id             String          @id @default(uuid())
-  name           String
-  email          String          @unique
-  password_hash  String
-  urlPhoto       String?
-  created_at     DateTime        @default(now())
-  driver         Driver?
-  contracts      Contract[]
-  absence        Absence[]
-  passwordResets PasswordReset[]
-  Stop           Stop[]
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password_hash String
+  urlPhoto      String?
+  created_at    DateTime   @default(now())
+  driver        Driver?
+  contracts     Contract[]
+  absence       Absence[]
+  Stop          Stop[]
 
   @@map("users")
-}
-
-model PasswordReset {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   String
-  code      String
-  expiresAt DateTime
-
-  @@map("password_resets")
 }
 
 model Driver {
