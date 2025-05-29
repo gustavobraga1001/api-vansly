@@ -17,6 +17,7 @@ app.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Permite envio de cookies
+  preflightContinue: true, // Permite requisições OPTIONS para o preflight CORS
 })
 
 // Configuração do JWT
