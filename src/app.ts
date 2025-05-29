@@ -13,11 +13,10 @@ export const app = fastify()
 
 // Configuração Completa do CORS
 app.register(cors, {
-  origin: true, // Permite todas as origens (apenas para desenvolvimento)
+  origin: '*', // Permitir todas as origens
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Permite envio de cookies
-  preflightContinue: true, // Permite requisições OPTIONS para o preflight CORS
+  allowedHeaders: ['*'], // Permitir todos os headers
+  credentials: true,
 })
 
 // Configuração do JWT
